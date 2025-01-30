@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings</title>
+    <meta http-equiv="refresh" content="5"> <!-- Refresh the page every 10 seconds -->
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+            padding: 0 20px;  /* No padding from top */
+            margin: 0;        /* No margin from top */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            width: 100%;
+            max-width: 1200px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            text-align: center;
+        }
+
+        .confirmed {
+            background-color: #90EE90; /* Green */
+        }
+
+        .not-confirmed {
+            background-color: #FFCCCB; /* Red */
+        }
+
+        button {
+            padding: 6px 12px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        button.confirm {
+            background-color: green;
+        }
+
+        button.not-confirmed {
+            background-color: red;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            table {
+                font-size: 12px; /* Reduce font size for better readability */
+                width: 100%;
+            }
+
+            table th, table td {
+                padding: 8px; /* Adjust padding for smaller screens */
+            }
+
+            button {
+                font-size: 12px;
+                padding: 5px 10px; /* Adjust button padding for smaller screens */
+            }
+
+            th, td {
+                text-align: center;
+                font-size: 14px; /* Adjust font size in table for smaller screens */
+            }
+
+            h1 {
+                font-size: 20px; /* Adjust heading size */
+            }
+        }
+
+        /* Further responsive improvement for very small screens (portrait phones) */
+        @media (max-width: 480px) {
+            table th, table td {
+                padding: 6px; /* Reduce padding for very small screens */
+            }
+
+            button {
+                font-size: 10px;
+                padding: 4px 8px; /* Adjust padding further for small devices */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <h1>Bookings List Admin  panel</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Telephone</th>
+                    <th>Country</th>
+                    <th>Members</th>
+                    <th>Address</th>
+                    <th>Country Code</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% bookings.reverse().forEach(function(booking) { %>
+                    <tr class="<%= booking.confirmed ? 'confirmed' : 'not-confirmed' %>">
+                        <td><%= new Date().toLocaleDateString() %></td>
+                        <td><%= booking.name %></td>
+                        <td><%= booking.telephone %></td>
+                        <td><%= booking.country %></td>
+                        <td><%= booking.members %></td>
+                        <td><%= booking.address %></td>
+                        <td><%= booking.countryCode %></td>
+                        <td>
+                            <% if (booking.confirmed) { %>
+                                <button class="confirm" onclick="changeStatus('<%= booking._id %>', 'confirmed', this)" disabled>Confirmed</button>
+                            <% } else { %>
+                                <button class="not-confirmed" onclick="changeStatus('<%= booking._id %>', 'confirmed', this)">Confirm</button>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Function to change booking status (Confirm)
+        async function changeStatus(bookingId, status, button) {
+            try {
+                const response = await fetch(`/update-status/${bookingId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status: status })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    // Change button text and class based on the confirmed status
+                    button.innerText = 'Confirmed';
+                    button.classList.remove('not-confirmed');
+                    button.classList.add('confirm');
+                    button.disabled = true;  // Disable button after confirmation
+                } else {
+                    alert('Failed to update status.');
+                }
+            } catch (error) {
+                console.error('Error updating status:', error);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookings</title>
-    <meta http-equiv="refresh" content="5"> <!-- Refresh the page every 10 seconds -->
+    <meta http-equiv="refresh" content="5"> <!-- Refresh the page every 5 seconds -->
     <style>
         * {
             box-sizing: border-box;
@@ -22,7 +22,7 @@
             padding: 0 20px;  /* No padding from top */
             margin: 0;        /* No margin from top */
         }
-
+        
         h1 {
             text-align: center;
             margin-bottom: 20px;
@@ -125,7 +125,7 @@
 </head>
 <body>
     <div class="table-container">
-        <h1>Bookings List Admin  panel</h1>
+        <h1>Bookings List Admin Panel</h1>
         <table>
             <thead>
                 <tr>
@@ -142,7 +142,8 @@
             <tbody>
                 <% bookings.reverse().forEach(function(booking) { %>
                     <tr class="<%= booking.confirmed ? 'confirmed' : 'not-confirmed' %>">
-                        <td><%= new Date().toLocaleDateString() %></td>
+                        <!-- Display the bookingDate field correctly -->
+                        <td><%= new Date(booking.bookingDate).toLocaleDateString() %></td> <!-- Format the booking date -->
                         <td><%= booking.name %></td>
                         <td><%= booking.telephone %></td>
                         <td><%= booking.country %></td>

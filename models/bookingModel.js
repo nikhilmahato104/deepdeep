@@ -1,3 +1,18 @@
+// const mongoose = require('mongoose');
+
+// const bookingSchema = new mongoose.Schema({
+//   name: String,
+//   telephone: String,
+//   country: String,
+//   members: Number,
+//   address: String,
+//   countryCode: String,
+//   confirmed: { type: Boolean, default: false }, // Confirmation status
+//   date: { type: Date, default: Date.now }, // Sorting by date
+// });
+
+// const Booking = mongoose.model('Booking', bookingSchema);
+// module.exports = Booking;
 const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({
@@ -8,7 +23,14 @@ const bookingSchema = new mongoose.Schema({
   address: String,
   countryCode: String,
   confirmed: { type: Boolean, default: false }, // Confirmation status
-  date: { type: Date, default: Date.now }, // Sorting by date
+  bookingDate: { 
+    type: Date, 
+    required: true,  // Ensure user provides a valid booking date
+  }, // The actual date of the booking provided by the user
+  createdAt: { 
+    type: Date, 
+    default: Date.now,  // Automatically set the creation time when booking is saved
+  },
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);

@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             color: #333;
-            font-family:Georgia, 'Times New Roman', Times, serif;
+            font-family: Georgia, 'Times New Roman', Times, serif;
         }
 
         /* Header Styling */
@@ -179,15 +179,13 @@
                 padding: 8px;
             }
         }
-       
-
     </style>
 </head>
 <body>
 
     <h1>AVIATOURS AUSTRALIA</h1>
     <h3>Bookings List Admin Panel</h3>
-    <h3>Wellcome! Kunal</h3>
+    <h3>Welcome! Kunal</h3>
     <p>Security provided by <a href="https://www.freelancerpro.in" target="_blank">freelancerpro (INDIA)</a></p>
 
     <div class="table-container">
@@ -233,14 +231,33 @@
         <p>&copy; 2025 AVIATOURS. All rights reserved. <br> Powered by <a href="https://www.freelancerpro.in" target="_blank">FreelancerPro</a></p>
     </footer>
 
+    <!-- Button to request notification permission -->
+    <button id="request-notification-btn">Enable Notifications</button>
+
     <script>
         // Request notification permission when the page loads
         if (Notification.permission !== 'granted') {
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    console.log('Notification permission granted');
-                }
+            // Ask for permission on user interaction, such as clicking a button
+            document.getElementById('request-notification-btn').addEventListener('click', function() {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        console.log('Notification permission granted');
+                    } else {
+                        console.log('Notification permission denied');
+                    }
+                });
             });
+        }
+
+        // Register the service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js')  // Register service-worker.js in the same folder
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
         }
 
         // Listen for updates from the SSE stream

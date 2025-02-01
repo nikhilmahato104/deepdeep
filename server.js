@@ -157,6 +157,72 @@
 // app.listen(PORT, () => {
 //   console.log(`Server is running on port ${PORT}`);
 // });
+// require('dotenv').config();
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const cors = require('cors');
+// const path = require('path');
+// const Booking = require('./models/bookingModel');
+
+// // Initialize Express app
+// const app = express();
+
+// // Middleware setup
+// app.use(cors());
+// app.use(express.json());
+// app.use(express.static(path.join(__dirname, 'public')));
+// app.set('view engine', 'ejs');
+
+// // MongoDB URI
+// const MONGODB_URI = process.env.MONGODB_URI;
+
+// // Connect to MongoDB
+// mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+//   .then(() => console.log('Connected to MongoDB Atlas'))
+//   .catch((err) => console.error('Error connecting to MongoDB:', err));
+
+// // Route to render the bookings page
+// app.get('/', async (req, res) => {
+//   try {
+//     const bookings = await Booking.find();
+//     res.render('index', { bookings });
+//   } catch (err) {
+//     console.error('Error fetching bookings:', err);
+//     res.status(500).json({ error: 'Error fetching bookings' });
+//   }
+// });
+
+// // Route to handle status update (Confirm or Not Confirmed)
+// app.post('/update-status/:id', async (req, res) => {
+//     const { id } = req.params;
+//     const { status } = req.body;
+
+//     try {
+//         // Find the booking by ID and update its status
+//         const booking = await Booking.findById(id);
+
+//         if (!booking) {
+//             return res.status(404).json({ success: false, message: 'Booking not found' });
+//         }
+
+//         // Update the status to 'confirmed'
+//         booking.confirmed = status === 'confirmed'; // Set it to confirmed
+
+//         // Save the updated booking
+//         await booking.save();
+
+//         res.json({ success: true, message: 'Booking status updated successfully' });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ success: false, message: 'Server error' });
+//     }
+// });
+
+// // Start the server
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -216,6 +282,22 @@ app.post('/update-status/:id', async (req, res) => {
         console.error(error);
         res.status(500).json({ success: false, message: 'Server error' });
     }
+});
+
+// SSE route to stream new bookings
+app.get('/events', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+
+    // Watch for new inserts to the "Booking" collection
+    Booking.watch().on('change', (change) => {
+        if (change.operationType === 'insert') {
+            const newBooking = change.fullDocument;
+            res.write(`data: ${JSON.stringify(newBooking)}\n\n`);
+        }
+    });
 });
 
 // Start the server

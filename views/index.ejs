@@ -231,35 +231,7 @@
         <p>&copy; 2025 AVIATOURS. All rights reserved. <br> Powered by <a href="https://www.freelancerpro.in" target="_blank">FreelancerPro</a></p>
     </footer>
 
-    <!-- Button to request notification permission -->
-    <button id="request-notification-btn">Enable Notifications</button>
-
     <script>
-        // Request notification permission when the page loads
-        if (Notification.permission !== 'granted') {
-            // Ask for permission on user interaction, such as clicking a button
-            document.getElementById('request-notification-btn').addEventListener('click', function() {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        console.log('Notification permission granted');
-                    } else {
-                        console.log('Notification permission denied');
-                    }
-                });
-            });
-        }
-
-        // Register the service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./service-worker.js')  // Register service-worker.js in the same folder
-                .then(function(registration) {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch(function(error) {
-                    console.log('Service Worker registration failed:', error);
-                });
-        }
-
         // Listen for updates from the SSE stream
         const eventSource = new EventSource('/events');
 
@@ -290,14 +262,6 @@
 
             // Prepend the new row to the table body to show it on top
             tableBody.insertBefore(newRow, tableBody.firstChild);
-
-            // If notifications are allowed, send the notification
-            if (Notification.permission === 'granted') {
-                new Notification('New Booking Added', {
-                    body: `Name: ${newBooking.name}, Phone: ${newBooking.telephone}`,
-                    icon: '/path/to/your/icon.png' // Optional icon path
-                });
-            }
         };
 
         // Function to change booking status (Confirm)
@@ -330,6 +294,10 @@
                 console.error('Error updating status:', error);
             }
         }
+          // Auto refresh the page every 5 seconds
+          setInterval(function() {
+            window.location.reload(); // Reload the page
+        }, 5000);
     </script>
 </body>
 </html>

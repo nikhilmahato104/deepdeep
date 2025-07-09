@@ -157,6 +157,12 @@
 // app.listen(PORT, () => {
 //   console.log(`Server is running on port ${PORT}`);
 // });
+
+
+
+
+
+
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -216,6 +222,22 @@ app.post('/update-status/:id', async (req, res) => {
         console.error(error);
         res.status(500).json({ success: false, message: 'Server error' });
     }
+});
+
+// SSE route to stream new bookings
+app.get('/events', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+
+    // Watch for new inserts to the "Booking" collection
+    Booking.watch().on('change', (change) => {
+        if (change.operationType === 'insert') {
+            const newBooking = change.fullDocument;
+            res.write(`data: ${JSON.stringify(newBooking)}\n\n`);
+        }
+    });
 });
 
 // Start the server

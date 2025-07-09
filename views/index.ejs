@@ -4,166 +4,266 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookings</title>
-    <meta http-equiv="refresh" content="5"> <!-- Refresh the page every 5 seconds -->
     <style>
-        * {
-            box-sizing: border-box;
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            color: #333;
+            font-family: Georgia, 'Times New Roman', Times, serif;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 60vh;
-            padding: 0 20px;  /* No padding from top */
-            margin: 0;        /* No margin from top */
-        }
-        
-        h1 {
+        /* Header Styling */
+        h1, h3 {
             text-align: center;
-            margin-bottom: 20px;
+            color: #4CAF50;
+            margin: 20px 0;
         }
 
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: underline;
+            color: #f5901d;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        p a {
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        /* Table Container */
         .table-container {
-            width: 100%;
             max-width: 1200px;
-            overflow-x: auto;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
 
+        /* Scrollable Table for mobile */
+        .table-scrollable {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 20px;
+        }
+
+        /* Table Styling */
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        table th, table td {
-            padding: 12px;
+        th, td {
+            padding: 12px 15px;
             text-align: left;
+            border: 1px solid #ddd;
+            font-size: 1rem;
         }
 
-        table th {
+        th {
+            background-color: #4CAF50;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Row Styling */
+        .confirmed-row {
+            background-color: #90EE90; /* Light Green for confirmed */
+        }
+
+        .not-confirmed-row {
+            background-color: #FFCCCB; /* Light Red for not confirmed */
+        }
+
+        /* Button Styling */
+        button {
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .confirm {
             background-color: #4CAF50;
             color: white;
         }
 
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            text-align: center;
-        }
-
-        .confirmed {
-            background-color: #90EE90; /* Green */
-        }
-
         .not-confirmed {
-            background-color: #FFCCCB; /* Red */
-        }
-
-        button {
-            padding: 6px 12px;
-            border: none;
-            cursor: pointer;
+            background-color: #FF6347;
             color: white;
-            font-size: 14px;
-            border-radius: 5px;
         }
 
-        button.confirm {
-            background-color: green;
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
 
-        button.not-confirmed {
-            background-color: red;
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #333;
+            color: white;
         }
 
-        /* Mobile Responsive Styles */
+        footer a {
+            color: #ff9800;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            table {
-                font-size: 12px; /* Reduce font size for better readability */
-                width: 100%;
+            h1 {
+                font-size: 2rem;
+                text-align: center;
             }
 
-            table th, table td {
-                padding: 8px; /* Adjust padding for smaller screens */
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 10px;
             }
 
             button {
                 font-size: 12px;
-                padding: 5px 10px; /* Adjust button padding for smaller screens */
-            }
-
-            th, td {
-                text-align: center;
-                font-size: 14px; /* Adjust font size in table for smaller screens */
-            }
-
-            h1 {
-                font-size: 20px; /* Adjust heading size */
+                padding: 6px 12px;
             }
         }
 
-        /* Further responsive improvement for very small screens (portrait phones) */
         @media (max-width: 480px) {
-            table th, table td {
-                padding: 6px; /* Reduce padding for very small screens */
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+            }
+
+            table {
+                font-size: 0.85rem;
             }
 
             button {
-                font-size: 10px;
-                padding: 4px 8px; /* Adjust padding further for small devices */
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+
+            th, td {
+                padding: 8px;
             }
         }
     </style>
 </head>
 <body>
+
+    <h1>AVIATOURS AUSTRALIA</h1>
+    <h3>Bookings List Admin Panel</h3>
+    <h3>Welcome! Kunal</h3>
+    <p>Security provided by <a href="https://www.freelancerpro.in" target="_blank">freelancerpro (INDIA)</a></p>
+
     <div class="table-container">
-        <h1>Bookings List Admin Panel</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Name</th>
-                    <th>Telephone</th>
-                    <th>Country</th>
-                    <th>Members</th>
-                    <th>Address</th>
-                    <th>Country Code</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% bookings.reverse().forEach(function(booking) { %>
-                    <tr class="<%= booking.confirmed ? 'confirmed' : 'not-confirmed' %>">
-                        <!-- Display the bookingDate field correctly -->
-                        <td><%= new Date(booking.bookingDate).toLocaleDateString() %></td> <!-- Format the booking date -->
-                        <td><%= booking.name %></td>
-                        <td><%= booking.telephone %></td>
-                        <td><%= booking.country %></td>
-                        <td><%= booking.members %></td>
-                        <td><%= booking.address %></td>
-                        <td><%= booking.countryCode %></td>
-                        <td>
-                            <% if (booking.confirmed) { %>
-                                <button class="confirm" onclick="changeStatus('<%= booking._id %>', 'confirmed', this)" disabled>Confirmed</button>
-                            <% } else { %>
-                                <button class="not-confirmed" onclick="changeStatus('<%= booking._id %>', 'confirmed', this)">Confirm</button>
-                            <% } %>
-                        </td>
+        <div class="table-scrollable">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Telephone</th>
+                        <th>Country</th>
+                        <th>Members</th>
+                        <th>Address</th>
+                        <th>Country Code</th>
+                        <th>Status</th>
                     </tr>
-                <% }); %>
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="bookingTable">
+                    <% bookings.reverse().forEach(function(booking) { %>
+                        <tr class="<%= booking.confirmed ? 'confirmed-row' : 'not-confirmed-row' %>">
+                            <td><%= new Date(booking.bookingDate).toLocaleDateString() %></td>
+                            <td><%= booking.name %></td>
+                            <td><%= booking.telephone %></td>
+                            <td><%= booking.country %></td>
+                            <td><%= booking.members %></td>
+                            <td><%= booking.address %></td>
+                            <td><%= booking.countryCode %></td>
+                            <td>
+                                <% if (booking.confirmed) { %>
+                                    <button class="confirm" disabled>Confirmed</button>
+                                <% } else { %>
+                                    <button class="not-confirmed" onclick="changeStatus('<%= booking._id %>', 'confirmed', this)">Confirm</button>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <footer>
+        <p>&copy; 2025 AVIATOURS. All rights reserved. <br> Powered by <a href="https://www.freelancerpro.in" target="_blank">FreelancerPro</a></p>
+    </footer>
+
     <script>
+        // Listen for updates from the SSE stream
+        const eventSource = new EventSource('/events');
+
+        eventSource.onmessage = function(event) {
+            const newBooking = JSON.parse(event.data);
+            console.log("New booking added:", newBooking);
+
+            // Create a new row for the booking
+            const tableBody = document.getElementById('bookingTable');
+            const newRow = document.createElement('tr');
+
+            newRow.classList.add(newBooking.confirmed ? 'confirmed-row' : 'not-confirmed-row');
+            newRow.innerHTML = `
+                <td>${new Date(newBooking.bookingDate).toLocaleDateString()}</td>
+                <td>${newBooking.name}</td>
+                <td>${newBooking.telephone}</td>
+                <td>${newBooking.country}</td>
+                <td>${newBooking.members}</td>
+                <td>${newBooking.address}</td>
+                <td>${newBooking.countryCode}</td>
+                <td>
+                    ${newBooking.confirmed ? 
+                        `<button class="confirm" disabled>Confirmed</button>` : 
+                        `<button class="not-confirmed" onclick="changeStatus('${newBooking._id}', 'confirmed', this)">Confirm</button>`
+                    }
+                </td>
+            `;
+
+            // Prepend the new row to the table body to show it on top
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+        };
+
         // Function to change booking status (Confirm)
         async function changeStatus(bookingId, status, button) {
             try {
@@ -177,11 +277,16 @@
 
                 const result = await response.json();
                 if (result.success) {
-                    // Change button text and class based on the confirmed status
+                    // Update the button text and disable it
                     button.innerText = 'Confirmed';
                     button.classList.remove('not-confirmed');
                     button.classList.add('confirm');
-                    button.disabled = true;  // Disable button after confirmation
+                    button.disabled = true;
+
+                    // Change the row style to confirmed
+                    const row = button.closest('tr');
+                    row.classList.remove('not-confirmed-row');
+                    row.classList.add('confirmed-row');
                 } else {
                     alert('Failed to update status.');
                 }
@@ -189,6 +294,10 @@
                 console.error('Error updating status:', error);
             }
         }
+          // Auto refresh the page every 5 seconds
+          setInterval(function() {
+            window.location.reload(); // Reload the page
+        }, 5000);
     </script>
 </body>
 </html>
